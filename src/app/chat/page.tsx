@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { resolveLanguage, LANG_OPTIONS } from "@/lib/lang-utils";
 
@@ -38,7 +38,7 @@ type Recognition = {
 
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-export default function ChatPage() {
+function ChatContent() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -389,5 +389,21 @@ export default function ChatPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div className="flex h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-600 dark:border-zinc-700 dark:border-t-zinc-400"></div>
+    </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ChatContent />
+    </Suspense>
   );
 }
