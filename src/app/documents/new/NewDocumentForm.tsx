@@ -14,13 +14,15 @@ type CommonFields = {
 
 type CategorySpecific = Record<string, Record<string, string>>;
 
+const getDefaultDate = () => new Date().toISOString().slice(0, 10);
+
 const DEFAULTS: Record<string, Partial<CommonFields>> = {
-  land: { city: "", date: new Date().toISOString().slice(0, 10) },
-  rental: { date: new Date().toISOString().slice(0, 10) },
-  affidavit: { date: new Date().toISOString().slice(0, 10) },
-  "income-declaration": { date: new Date().toISOString().slice(0, 10) },
-  agreement: { date: new Date().toISOString().slice(0, 10) },
-  copyright: { date: new Date().toISOString().slice(0, 10) },
+  land: { city: "" },
+  rental: {},
+  affidavit: {},
+  "income-declaration": {},
+  agreement: {},
+  copyright: {},
 };
 
 const SPEC_FIELDS: Record<string, Array<{ key: string; label: string; placeholder?: string }>> = {
@@ -140,7 +142,7 @@ export default function NewDocumentForm() {
   const [common, setCommon] = useState<CommonFields>({
     applicantName: "",
     address: "",
-    date: DEFAULTS[initialSlug]?.date || new Date().toISOString().slice(0, 10),
+    date: getDefaultDate(),
     city: DEFAULTS[initialSlug]?.city || "",
   });
   const [spec, setSpec] = useState<CategorySpecific>({});
@@ -163,7 +165,6 @@ export default function NewDocumentForm() {
     setSlug(s);
     setCommon((c) => ({
       ...c,
-      date: DEFAULTS[s]?.date || c.date,
       city: DEFAULTS[s]?.city || c.city,
     }));
   };
